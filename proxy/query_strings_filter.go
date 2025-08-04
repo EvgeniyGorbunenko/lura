@@ -13,6 +13,9 @@ import (
 // NewFilterQueryStringsMiddleware returns a middleware with or without a header filtering
 // proxy wrapping the next element (depending on the configuration).
 func NewFilterQueryStringsMiddleware(logger logging.Logger, remote *config.Backend) Middleware {
+	logger.Info("remote.QueryStringsToPass")
+	logger.Info(remote.QueryStringsToPass)
+
 	if len(remote.QueryStringsToPass) == 0 {
 		return emptyMiddlewareFallback(logger)
 	}
@@ -24,6 +27,9 @@ func NewFilterQueryStringsMiddleware(logger logging.Logger, remote *config.Backe
 		}
 		nextProxy := next[0]
 		return func(ctx context.Context, request *Request) (*Response, error) {
+			logger.Info("request.Query")
+			logger.Info(request.Query)
+
 			if len(request.Query) == 0 {
 				return nextProxy(ctx, request)
 			}
@@ -50,6 +56,10 @@ func NewFilterQueryStringsMiddleware(logger logging.Logger, remote *config.Backe
 					newQueryStrings[v] = values
 				}
 			}
+
+			logger.Info("newQueryStrings")
+			logger.Info(newQueryStrings)
+
 			return nextProxy(ctx, &Request{
 				Method:  request.Method,
 				URL:     request.URL,
