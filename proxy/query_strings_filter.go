@@ -70,6 +70,7 @@ func NewFilterQueryStringsMiddleware(logger logging.Logger, remote *config.Backe
 				Headers: request.Headers,
 			}
 
+			logger.Info("Request")
 			logger.Info(r.Method)
 			logger.Info(r.URL)
 			logger.Info(r.Query)
