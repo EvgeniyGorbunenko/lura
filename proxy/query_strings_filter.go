@@ -60,7 +60,7 @@ func NewFilterQueryStringsMiddleware(logger logging.Logger, remote *config.Backe
 			logger.Info("newQueryStrings")
 			logger.Info(newQueryStrings)
 
-			return nextProxy(ctx, &Request{
+			r := &Request{
 				Method:  request.Method,
 				URL:     request.URL,
 				Query:   newQueryStrings,
@@ -68,7 +68,17 @@ func NewFilterQueryStringsMiddleware(logger logging.Logger, remote *config.Backe
 				Body:    request.Body,
 				Params:  request.Params,
 				Headers: request.Headers,
-			})
+			}
+
+			logger.Info(r.Method)
+			logger.Info(r.URL)
+			logger.Info(r.Query)
+			logger.Info(r.Path)
+			logger.Info(r.Body)
+			logger.Info(r.Params)
+			logger.Info(r.Headers)
+
+			return nextProxy(ctx, r)
 		}
 	}
 }
